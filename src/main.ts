@@ -4,6 +4,7 @@ const add = (n1: number, n2: number, showResult: boolean, phrase: string) => {
   const result = n1 + n2;
   if (showResult) {
     console.log(phrase + result);
+    return;
   } else {
     return result;
   }
@@ -109,4 +110,56 @@ const generateError = (message: string, code: number): never => {
   throw { message: message, errorCode: code };
 };
 
-generateError("An error occured", 500);
+// generateError("An error occured", 500);
+
+interface Person {
+  name: string;
+  age: number;
+  greet(phrase: string): void;
+}
+
+let user1: Person;
+
+user1 = {
+  name: "Pratik",
+  age: 30,
+  greet(phrase: string) {
+    console.log(phrase + " " + this.name);
+  },
+};
+
+user1.greet("Hi there - I am");
+
+interface Named {
+  readonly name: string;
+  outputname?: string;
+}
+interface Greetable extends Named {
+  greet(phrase: string): void;
+}
+
+class Human implements Greetable {
+  name: string;
+  age = 30;
+
+  constructor(n: string) {
+    this.name = n;
+  }
+
+  greet(phrase: string) {
+    console.log(phrase + " " + this.name);
+  }
+}
+
+let newHuman: Human;
+newHuman = new Human("Pratik");
+newHuman.greet("Hello, I am");
+
+interface AddFn {
+  (a: number, b: number): number;
+}
+
+let sum: AddFn;
+sum = (n1: number, n2: number) => {
+  return n1 + n2;
+};
