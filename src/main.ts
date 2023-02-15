@@ -163,3 +163,161 @@ let sum: AddFn;
 sum = (n1: number, n2: number) => {
   return n1 + n2;
 };
+
+// intersection types
+
+type Admin = {
+  name: string;
+  privileges: string[];
+};
+
+type Employee = {
+  name: string;
+  startDate: Date;
+};
+
+type EleveatedEmployee = Admin & Employee;
+
+const e1: EleveatedEmployee = {
+  name: "Pratik",
+  privileges: ["create-server"],
+  startDate: new Date(),
+};
+
+console.log(e1);
+
+type Combinable = number | string;
+type Numeric = number | boolean;
+
+type Universal = Combinable & Numeric;
+
+// type guards
+
+const addNum = (a: Combinable, b: Combinable) => {
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+
+  return a + b;
+};
+
+type UnknownEmployee = Admin | Employee;
+
+const printEmployeeInfo = (emp: UnknownEmployee) => {
+  console.log("Name: " + emp.name);
+  if ("privileges" in emp) {
+    console.log("Privileges: " + emp.privileges);
+  }
+  if ("startDate" in emp) {
+    console.log("Start Date: " + emp.startDate);
+  }
+};
+
+const e2: Employee = {
+  name: "Mohit",
+  startDate: new Date("02/09/2021"),
+};
+
+printEmployeeInfo(e1);
+printEmployeeInfo(e2);
+
+class Car {
+  drive() {
+    console.log("Driving a Car...");
+  }
+}
+
+class Truck {
+  drive() {
+    console.log("Driving a Truck...");
+  }
+
+  loadCargo(amount: number) {
+    console.log("Loading cargo: ", amount);
+  }
+}
+
+type Vehicle = Car | Truck;
+
+const useVehicle = (vehicle: Vehicle) => {
+  vehicle.drive();
+  if (vehicle instanceof Truck) {
+    vehicle.loadCargo(1000);
+  }
+};
+
+const v1 = new Car();
+const v2 = new Truck();
+
+useVehicle(v1);
+useVehicle(v2);
+
+// discriminated Unions
+
+interface Bird {
+  type: "bird";
+  flyingSpeed: number;
+}
+
+interface Horse {
+  type: "horse";
+  runningSpeed: number;
+}
+
+type Animal = Bird | Horse;
+
+const moveAnimal = (animal: Animal) => {
+  let speed: number;
+  switch (animal.type) {
+    case "bird":
+      speed = animal.flyingSpeed;
+      break;
+    case "horse":
+      speed = animal.runningSpeed;
+      break;
+  }
+  console.log("Moving with speed: " + speed);
+};
+
+const pigeon: Bird = {
+  type: "bird",
+  flyingSpeed: 10,
+};
+
+moveAnimal(pigeon);
+
+// const userInputElement = <HTMLInputElement>document.getElementById('user-input')!
+const userInputElement = document.getElementById(
+  "user-input"
+)! as HTMLInputElement;
+userInputElement.value = "Hi there";
+
+// index properties
+
+interface ErrorContainer {
+  id: string;
+  [prop: string]: string;
+}
+
+const errorBag: ErrorContainer = {
+  id: "e1",
+  email: "not a valid email",
+  username: "must start with a character",
+};
+
+// function overloads
+
+function sumInput(a: number, b: number): number;
+function sumInput(a: string, b: string): string;
+function sumInput(a: number, b: string): string;
+function sumInput(a: string, b: number): string;
+function sumInput(a: Combinable, b: Combinable) {
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+
+  return a + b;
+}
+
+const result = sumInput("pratik ", "tiwari");
+result.split(" ");
