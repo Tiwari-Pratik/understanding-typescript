@@ -321,3 +321,82 @@ function sumInput(a: Combinable, b: Combinable) {
 
 const result = sumInput("pratik ", "tiwari");
 result.split(" ");
+
+// Generics
+
+function merge<T extends object, U extends object>(objA: T, objB: U) {
+  return Object.assign(objA, objB);
+}
+
+console.log(merge({ name: "Pratik" }, { age: 30 }));
+const mergedObj = merge({ name: "Mohit" }, { age: 30 });
+console.log(mergedObj.name);
+
+interface Lengthy {
+  length: number;
+}
+
+function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
+  let descriptionText = "Got no value";
+  if (element.length === 1) {
+    descriptionText = `Got 1 element`;
+  } else if (element.length > 1) {
+    descriptionText = `Got ${element.length} elements`;
+  }
+  return [element, descriptionText];
+}
+
+console.log(countAndDescribe(["sports", "cooking"]));
+
+function extractAndConvert<T extends object, U extends keyof T>(
+  obj: T,
+  key: U
+) {
+  return "Value: " + obj[key];
+}
+
+console.log(extractAndConvert({ name: "mohit", age: 30 }, "name"));
+
+class DataStorage<T extends number | string | boolean> {
+  private data: T[] = [];
+
+  addItem(item: T) {
+    this.data.push(item);
+  }
+
+  removeItem(item: T) {
+    this.data.splice(this.data.indexOf(item), 1);
+  }
+
+  getItem() {
+    return [...this.data];
+  }
+}
+
+const textStorage = new DataStorage<string>();
+textStorage.addItem("Pratik");
+textStorage.addItem("Mohit");
+console.log(textStorage.getItem());
+textStorage.removeItem("Pratik");
+console.log(textStorage.getItem());
+
+interface CourseGoal {
+  title: string;
+  description: string;
+  completeUntil: Date;
+}
+
+function createCourseGoal(
+  title: string,
+  description: string,
+  date: Date
+): CourseGoal {
+  let courseGoal: Partial<CourseGoal> = {};
+  courseGoal.title = title;
+  courseGoal.description = description;
+  courseGoal.completeUntil = date;
+
+  return courseGoal as CourseGoal;
+}
+
+const names: Readonly<string[]> = ["mohit", "pratik"];
